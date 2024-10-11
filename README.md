@@ -3,8 +3,13 @@
 ## A Java-based classic arcade game
 
 Introduction and background:
-- This application is used to write a game named Tetris. Users will be able to control falling tetromino blocks, rotate them, and fit them into a grid. The game ends when the blocks fill up the screen. This application will record the time and grade on every previous game. Users can see if they do better than before. 
-- The application is designed for anyone who enjoys puzzle games, particularly fans of classic arcade games like Tetris.
-- I personally enjoyed playing games and I am also interested in developing games. Also, developing a Tetris game in Java is an opportunity to strengthen my understanding of object-oriented programming and game development principles. It's a manageable but challenging project that allows for creativity in game mechanics and UI design while being a well-known project to demonstrate to future employers.
+- This application is used to write a Tower Defense game. Users will be able to add arbitary number of towers to the map to attack the enemies according to 4 different levels. With different levels, the enemies can have different numbers and health. But the towers will have only one damage. You can have arbitary number of round to play this game and you can delete any tower at the very beginning of every round.
+- The application is designed for anyone who enjoys Tower Defense game.
+- I personally enjoyed playing games and I am also interested in developing games. It's a manageable but challenging project that allows for creativity in game mechanics and UI design while being a well-known project to demonstrate to future employers.
 
+User story:
+- As a user, I want to be able to add towers to the map.
+- As a user, I want to see if I defeat the enemies.
+- As a user, I want to remove any tower on the map.
+- As a user, I want to try difficult level of enemies.
 An example of text with **bold** and *italic* fonts.  
