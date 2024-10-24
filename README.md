@@ -12,4 +12,7 @@ User story:
 - As a user, I want to see if I defeat the enemies.
 - As a user, I want to remove any tower on the map.
 - As a user, I want to try difficult level of enemies.
+- As a user, I want to quilt the game.
+- As a user, I want to save the map and the towers on the map.
+- As a user. I wang to load the map and the towers on the map.
 An example of text with **bold** and *italic* fonts.  
