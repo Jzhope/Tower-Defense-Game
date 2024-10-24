@@ -32,11 +32,9 @@ public class Enemy {
     
     //MODIEFIES: this
     //EFFECT: decrease the x-postion by move_step and print ou the effect 
-    public void move() {
-        if (x1 > 0) {
-            x1 -= MOVE_STEP;   
-            System.out.println("Enemy at (" + x1 + "," + y1 + ") moves " + MOVE_STEP + " steps to the left.");
-        }
+    public void move() { 
+        x1 -= MOVE_STEP;   
+        System.out.println("Enemy at (" + x1 + "," + y1 + ") moves " + MOVE_STEP + " steps to the left.");
     }
     
     //EFFECT: returns if the x-postion is 0 (enemy reach the base)
@@ -50,5 +48,9 @@ public class Enemy {
 
     public int getY1() {
         return y1;
+    }
+
+    public int getHealth() {
+        return health;
     }
 }

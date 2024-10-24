@@ -1,0 +1,14 @@
+{
+    "width": 5,
+    "height": 6,
+    "towers": [
+        {
+            "The row of Tower": 4,
+            "The column of Tower": 2
+        },
+        {
+            "The row of Tower": 1,
+            "The column of Tower": 3
+        }
+    ]
+}

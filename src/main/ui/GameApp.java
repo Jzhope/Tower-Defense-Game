@@ -1,24 +1,35 @@
 package ui;
 
+import persistence.JsonReader;
+import persistence.JsonWriter;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.Random;
 
 import model.GameMap;
+import model.GameOverException;
 import model.Tower;
 import model.Enemy;
 
 // Tower Defence Game App
 public class GameApp {
+    private static final String JSON_STORE = "./data/map.json";
     private GameMap map;
     private int roundNumber = 1;
     private Scanner scanner;
     private int isinbound = 1;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECT: construct a game map with 10 width and 5 height then setup and start
     // the game app
-    public GameApp() {
+    public GameApp() throws FileNotFoundException {
         scanner = new Scanner(System.in);
         map = new GameMap(10, 5);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
         setupGame();
         startGame();
     }
@@ -54,39 +65,74 @@ public class GameApp {
     }
 
     // EFFECTS: run the game
-    public void startGame() {
-
-        while (map.hasEnemies()) {
-            map.updateMap();
-        }
+    public void runGame() {
         if (!map.hasEnemies()) {
-            newRound();
+            boolean keepGoing = true;
+            String command = null;
+
+            while (keepGoing) {
+                displayMenu();
+                command = scanner.next();
+                command = command.toLowerCase();
+
+                if (command.equals("q")) {
+                    keepGoing = false;
+                } else {
+                    processCommand(command);
+                }
+            }
+            System.out.println("Game over. Thanks for playing!");
         }
     }
 
-    // MODIFIES: this
-    // EFFECTS: get into a new round of game & remove unnecessary tower
-    private void newRound() {
-        System.out.println("All enemies defeated! You win this round.");
-        System.out.println("Would you like to remove any towers from the map? (yes/no)");
-        String removeTowerResponse = scanner.next();
-
-        if (removeTowerResponse.equals("yes")) {
-            removeTower();
-        }
-
-        System.out.println("Would you like to start a new round? (yes/no)");
-
-        String response = scanner.next();
-        if (response.equals("yes")) {
-            roundNumber++;
-            setupGame();
-            startGame();
-        } else {
+    // EFFECTS: run the game
+    public void startGame() {
+        try {
+            while (map.hasEnemies()) {
+                map.updateMap();
+            }
+        } catch (GameOverException e) {
+            System.out.println(e.getMessage());
             System.out.println("Game over. Thanks for playing!");
             scanner.close();
             System.exit(0);
         }
+
+        runGame();
+    }
+
+    // EFFECTS: displays menu of options to user
+    private void displayMenu() {
+        System.out.println("All enemies defeated! You win this round.");
+        System.out.println("\t r - > Remove towers from the map");
+        System.out.println("\t s - > Save the Map");
+        System.out.println("\t l - > Load the Map");
+        System.out.println("\t n - > start a new round");
+        System.out.println("\t q - > quilt the game");
+    }
+
+    // MODIFIES: this
+    // EFFECTS: processes user command
+    private void processCommand(String command) {
+        if (command.equals("r")) {
+            removeTower();
+        } else if (command.equals("s")) {
+            saveMap();
+        } else if (command.equals("l")) {
+            loadMap();
+        } else if (command.equals("n")) {
+            newRound();
+        } else {
+            System.out.println("Selection not valid...");
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: get into a new round of game
+    private void newRound() {
+        roundNumber++;
+        setupGame();
+        startGame();
     }
 
     // MODIFIES: this
@@ -128,6 +174,29 @@ public class GameApp {
                 System.out.println("No tower removed.");
             }
         } while (towerIndex != 0);
+    }
+
+    // EFFECTS: saves the map to file
+    private void saveMap() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(map);
+            jsonWriter.close();
+            System.out.println("Saved to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads map from file
+    private void loadMap() {
+        try {
+            map = jsonReader.read();
+            System.out.println("Loaded map from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
     }
 
     // EFFECTS: prints out a line of dashes to act as a divider

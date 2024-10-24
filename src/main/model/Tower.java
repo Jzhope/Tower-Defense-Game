@@ -1,8 +1,11 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 //Represents a tower has a x-postion, y-position, range that can attack enemy and
 //the damage it can take
-public class Tower {
+public class Tower implements Writable {
     private int x2;        // the position of the TOWER
     private int y2;        // the position of the TOWER
     private int range;    // Tower can attack enemy within this range
@@ -46,5 +49,13 @@ public class Tower {
 
     public int getY2() {
         return y2;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("The column of Tower", x2);
+        json.put("The row of Tower", y2);
+        return json;
     }
 }

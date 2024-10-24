@@ -1,10 +1,15 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.List;
 import java.util.ArrayList;
 
+
 // Represents the background that allows the enemy and tower to stay
-public class GameMap {
+public class GameMap implements Writable {
     private int width;            // The width of the map
     private int height;           // The height of the map
     private List<Tower> towers;  // The list of Towers that can stay in the map
@@ -18,7 +23,7 @@ public class GameMap {
         towers = new ArrayList<>();
         enemies = new ArrayList<>();
     }
-   
+
     //EFFECTS: return true if the object is in the map
     private boolean isWithinBounds(int x, int y) {
         if (x >= 0 && x < width && y >= 0 && y < height) {
@@ -75,11 +80,12 @@ public class GameMap {
 
         for (Enemy enemy : enemies) {
             if (enemy.reachedBase()) {
-                System.out.println("Enemy reached the base! Game over, you lose.");
-                System.exit(0);  
+                throw new GameOverException("Enemy reached the base! Game over, you lose.");
             }
         }
+
         List<Enemy> aliveEnemies = new ArrayList<>();
+        
         for (Enemy enemy : enemies) {
             if (enemy.isAlive()) {
                 aliveEnemies.add(enemy);
@@ -95,11 +101,16 @@ public class GameMap {
         return !enemies.isEmpty();
     }
     
+    // EFFECTS: returns an unmodifiable list of towers in gamemap
+    //public List<Tower> getTower() {
+    //    return Collections.unmodifiableList(towers);
+    //}
+    
     //EFFECTS: return the list of towers
     public List<Tower> getTowers() {
         return towers;
     }
-    
+
     // MODIFIES: this
     // EFFECTS: remove the current tower
     public void removeTower(Tower tower) {
@@ -112,6 +123,31 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    // EFFECTS: returns number of towers in this game map
+    public int numTowers() {
+        return towers.size();
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject(); 
+        json.put("width", width);      
+        json.put("height", height);
+        json.put("towers", towersToJson());
+        return json;
+    }
+
+    // EFFECTS: returns towers in this gamemap as a JSON array
+    private JSONArray towersToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Tower t : towers) {
+            jsonArray.put(t.toJson());
+        }
+
+        return jsonArray;
     }
 }
 
