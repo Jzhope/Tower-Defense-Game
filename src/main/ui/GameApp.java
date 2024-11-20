@@ -45,6 +45,15 @@ public class GameApp {
     private void setupGame() {
         System.out.println("The Map has 10 columns and 5 rows.\n Round " + roundNumber + ":");
         System.out.println("Enter the number of towers you would like to add:");
+        getTowerCount();
+
+        printDivider();
+        System.out.println("How much difficulty do you want it to be? (from 1 to 4 level)");
+        int input = scanner.nextInt();
+        level(input);
+    }
+
+    private void getTowerCount() {
         int towerCount = scanner.nextInt();
         for (int i = 0; i < towerCount; i++) {
             System.out.println("Enter the column where the tower is located:");
@@ -56,12 +65,6 @@ public class GameApp {
                 i = i - 1;
             }
         }
-
-        printDivider();
-        System.out.println("How much difficulty do you want it to be? (from 1 to 4 level)");
-        int input = scanner.nextInt();
-        level(input);
-        printDivider();
     }
 
     // EFFECTS: run the game
@@ -140,7 +143,7 @@ public class GameApp {
     private void level(int level) {
         Random random = new Random();
         for (int i = 0; i <= level + 4; i++) {
-            int health = random.nextInt(100) + 100 * level;
+            int health = random.nextInt(50) + 50 * level;
             int enemyX = map.getWidth();
             int enemyY = random.nextInt(map.getHeight());
             addEnemy(health, enemyX, enemyY);

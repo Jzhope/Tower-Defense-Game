@@ -24,7 +24,7 @@ public class TowerTest {
     @BeforeEach
     public void setUp() { 
         tower = new Tower(5, 5); 
-        enemyInRange1 = new Enemy(10, 7, 7);
+        enemyInRange1 = new Enemy(10, 5, 5);
         
         enemyOutOfRange1 = new Enemy(10, 15, 15);
         enemyOutOfRange2 = new Enemy(10, 8, 15);

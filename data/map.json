@@ -4,7 +4,7 @@
     "towers": [
         {
             "The row of Tower": 1,
-            "The column of Tower": 1
+            "The column of Tower": 2
         },
         {
             "The row of Tower": 2,
@@ -12,7 +12,19 @@
         },
         {
             "The row of Tower": 3,
-            "The column of Tower": 3
+            "The column of Tower": 2
+        },
+        {
+            "The row of Tower": 3,
+            "The column of Tower": 2
+        },
+        {
+            "The row of Tower": 2,
+            "The column of Tower": 4
+        },
+        {
+            "The row of Tower": 1,
+            "The column of Tower": 4
         }
     ]
 }

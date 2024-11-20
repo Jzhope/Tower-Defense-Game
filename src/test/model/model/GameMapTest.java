@@ -3,6 +3,8 @@ package model.model;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.List;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,20 @@ public class GameMapTest {
         int result = gameMap.addTower(mockTower, 0);
         assertEquals(1, result);
         assertTrue(gameMap.getTowers().contains(mockTower));
+    }
+
+    @Test
+    public void testisGameOver () {
+        assertFalse(gameMap.isGameOver());
+    }
+
+    
+    @Test
+    public void testlistOfenemies () {
+        List<Enemy> enemies = new ArrayList<>();
+        enemies.add(enemy1);
+        gameMap.addEnemy(enemy1);
+        assertEquals(enemies,gameMap.getEnemies());
     }
 
     @Test

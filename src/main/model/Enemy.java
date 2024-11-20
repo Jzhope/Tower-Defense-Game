@@ -39,7 +39,7 @@ public class Enemy {
     
     //EFFECT: returns if the x-postion is 0 (enemy reach the base)
     public boolean reachedBase() {
-        return x1 == 0;   
+        return x1 < 0;   
     }
 
     public int getX1() {

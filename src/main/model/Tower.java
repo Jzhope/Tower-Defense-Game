@@ -17,8 +17,8 @@ public class Tower implements Writable {
     public Tower(int x, int y) {
         this.x2 = x;
         this.y2 = y;
-        this.range = 5;   
-        this.damage = 20;   
+        this.range = 1;   
+        this.damage = 30;   
     }
     
     //EFFECT: return true if the enemy is within range
@@ -35,8 +35,8 @@ public class Tower implements Writable {
         int attackedCount = 0;  
         for (Enemy enemy : enemies) {
             if (attackedCount < 2 && enemy.isAlive() && isInRange(enemy)) {
-                System.out.println("Tower at (" + x2 + "," + y2 + ") attacks enemy at (" 
-                        + enemy.getX1() + "," + enemy.getY1() + ") for " + damage + " damage.");
+                System.out.println("Tower at (" + (x2 + 1) + "," + (y2 + 1) + ") attacks enemy at (" 
+                        + (enemy.getX1() + 1) + "," + (enemy.getY1() + 1) + ") for " + damage + " damage.");
                 enemy.takeDamage(damage);
                 attackedCount++;
             }

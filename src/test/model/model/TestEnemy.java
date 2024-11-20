@@ -18,7 +18,7 @@ public class TestEnemy {
         enemy = new Enemy(10,5,5);
     }
 
-     @Test
+    @Test
     public void testIsAlive() { 
         assertTrue(enemy.isAlive(), "Enemy should be alive with health > 0");
          
@@ -54,7 +54,7 @@ public class TestEnemy {
     public void testReachedBase() { 
         assertFalse(enemy.reachedBase(), "Enemy should not have reached the base initially");
  
-        enemy = new Enemy(10, 0, 5);
-        assertTrue(enemy.reachedBase(), "Enemy should have reached the base when x is 0");
+        enemy = new Enemy(10, -1, 5);
+        assertTrue(enemy.reachedBase());
     }
 }
