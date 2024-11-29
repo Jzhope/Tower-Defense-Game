@@ -23,3 +23,25 @@
 - You can locate my visual component by click any button.
 - You can save the state of my application by click the save button.
 - You can reload the state of my application by click the load button.
+
+# Phase 4: Task 2
+- You can see what event happened in the console when the program is running or ends. For example:
+        Thu Nov 28 13:07:23 PST 2024
+        Placed Tower at (4,4)
+
+
+        Thu Nov 28 13:07:24 PST 2024
+        Placed Tower at (4,2)
+
+
+        Thu Nov 28 13:07:25 PST 2024
+        Removed tower at (3,2).
+
+
+        Thu Nov 28 13:07:25 PST 2024
+        Placed Tower at (6,3)
+
+# Phase 4: Task 3
+- Some of the classes like GameApp and GamePanel have too many methods which are hard to read.
+I can split the class GameApp into several different classes including GameController and GamePreparing;
+- Some methods have the same name but created and used in different classes like addEnemy. They can be put into a public tool class   thus all the class can use them more conveniently. 

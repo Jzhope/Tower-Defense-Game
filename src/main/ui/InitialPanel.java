@@ -1,10 +1,10 @@
 package ui;
 
- 
-
 import javax.swing.*;
 
 import persistence.JsonReader;
+import model.EventLog;
+import model.Event;
 import model.GameMap;
 import java.io.IOException;
 
@@ -12,58 +12,70 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
- 
 public class InitialPanel extends JPanel {
 
     private static final String JSON_STORE = "./data/map.json";
     int difficulty = 1;
     private JsonReader jsonReader;
-    private GameMap map;
+    private GameMap map; 
 
- 
-    
-    //EFFECTS: construct a panel to show menu
-    public InitialPanel() {
-        
-         
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
+    // EFFECTS: construct a panel to show menu
+    public InitialPanel(JFrame frame) {
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.CENTER_ALIGNMENT);
 
-         
         jsonReader = new JsonReader(JSON_STORE);
-        map = new GameMap(10,5);
- 
+        map = new GameMap(10, 5); 
+
         JButton button1 = new JButton("Load the Towers");
         JButton button2 = new JButton("Level Choose");
         JButton button3 = new JButton("Start the Game");
+        JButton button4 = new JButton("Quit the Game");
 
         button1.setAlignmentX(Component.CENTER_ALIGNMENT);
         button2.setAlignmentX(Component.CENTER_ALIGNMENT);
         button3.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button4.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         loadMap(button1);
         showdifficulty(button2);
-        openWindow(button3);
+        openWindow(button3,frame);
+        quitGame(button4);
 
+        add(Box.createVerticalStrut(15));
         add(button1);
-        add(Box.createVerticalStrut(20)); 
+        add(Box.createVerticalStrut(20));
         add(button2);
         add(Box.createVerticalStrut(20));
         add(button3);
+        add(Box.createVerticalStrut(20));
+        add(button4);
     }
 
-    
-    //effects:open window in which Space Invaders game will be played
-    private void openWindow(JButton button3) {
-        button3.addActionListener(new ActionListener() {
+    private void quitGame(JButton button4) {
+        button4.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openNewWindow();
+                for (Event next : EventLog.getInstance()) {
+                    System.out.println(next.toString() + "\n\n");
+                }
+                System.exit(0);
             }
         });
     }
 
-    //effects: choose difficulty level
+    // effects:open window in which Space Invaders game will be played
+    private void openWindow(JButton button3, JFrame frame) {
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openNewWindow(frame);
+            }
+        });
+    }
+
+    // effects: choose difficulty level
     private void showdifficulty(JButton button2) {
         button2.addActionListener(new ActionListener() {
             @Override
@@ -73,7 +85,7 @@ public class InitialPanel extends JPanel {
         });
     }
 
-    //effects: load the map
+    // effects: load the map
     private void loadMap(JButton button1) {
         button1.addActionListener(new ActionListener() {
             @Override
@@ -89,14 +101,12 @@ public class InitialPanel extends JPanel {
         difficultySlider.setPaintTicks(true);
         difficultySlider.setPaintLabels(true);
 
- 
         int result = JOptionPane.showConfirmDialog(
-                this, 
-                difficultySlider, 
-                "Select Difficulty", 
-                JOptionPane.OK_CANCEL_OPTION, 
-                JOptionPane.PLAIN_MESSAGE
-        );
+                this,
+                difficultySlider,
+                "Select Difficulty",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
             difficulty = difficultySlider.getValue();
@@ -114,9 +124,9 @@ public class InitialPanel extends JPanel {
         }
     }
 
- 
-    private void openNewWindow() {
-        new TowerDefense(map,difficulty); 
+    private void openNewWindow(JFrame frame) {
+        frame.dispose();
+        new TowerDefense(map, difficulty);
     }
 
 }

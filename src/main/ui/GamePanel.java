@@ -8,11 +8,11 @@ import java.util.Random;
 import model.GameMap;
 import model.GameOverException;
 import model.Tower;
- 
+
 import persistence.JsonWriter;
 import model.Enemy;
- 
- 
+import model.Event;
+import model.EventLog;
 
 public class GamePanel extends JPanel {
     private static final String JSON_STORE = "./data/map.json";
@@ -33,24 +33,23 @@ public class GamePanel extends JPanel {
     private boolean enemyExist = false;
     private boolean gameOverTriggered = false;
     private JsonWriter jsonWriter;
-    
+    private JFrame frame; 
     // Tower Defence Game App game panel
 
     // EFFECT: construct a game panel
-    public GamePanel(GameMap map, int level) {
+    public GamePanel(JFrame frame, GameMap map, int level) { 
         this.map = map;
         this.setPreferredSize(new Dimension(600, 350));
         this.setLayout(new BorderLayout());
         this.level = level;
-        this.canPlaceTower = true;  
+        this.canPlaceTower = true;
         this.maxTowers = 2 + level;
-        
+        this.frame = frame;
 
         towerImage = new ImageIcon("tower.png").getImage();
         enemyImage = new ImageIcon("enemy.png").getImage();
-        
-        jsonWriter = new JsonWriter(JSON_STORE);
 
+        jsonWriter = new JsonWriter(JSON_STORE);
 
         JPanel buttonPanel = new JPanel();
         JButton saveButton = new JButton("Save");
@@ -61,16 +60,12 @@ public class GamePanel extends JPanel {
 
         saveTheTowers(saveButton);
         exitTheGame(exitButton);
- 
+
         fiveSecTimer();
         startEnemyGeneration();
         startEnemyMovement();
         addMouseListener(mouseListener);
-         
-         
-         
     }
-
 
     // EFFECTS: to see if there is any enemy exist.
     public boolean enemyCleared() {
@@ -82,75 +77,75 @@ public class GamePanel extends JPanel {
         placementTimer = new Timer(5000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                canPlaceTower = false;  
+                canPlaceTower = false;
                 System.out.println("You can no longer place towers.");
             }
         });
-        placementTimer.setRepeats(false);  
+        placementTimer.setRepeats(false);
         placementTimer.start();
     }
 
     // EFFECTS: generate Enemies
     private void startEnemyGeneration() {
-        Timer enemyGenerationTimer = new Timer(5000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setUpEnemies(level);
-            }
-        });
-        enemyGenerationTimer.start();
-            
+         
+            Timer enemyGenerationTimer = new Timer(5000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    setUpEnemies(level);
+                    ((Timer) e.getSource()).stop(); 
+                }
+            });
+            enemyGenerationTimer.start(); 
+
     }
 
-    //EFFECTS: enemy start moving
+    // EFFECTS: enemy start moving
     private void startEnemyMovement() {
         enemyMoveTimer = new Timer(500, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!gameOver) {
                     try {
-                        map.updateMap();  // Attempt to update the map (move enemies)
-                        repaint();  // Repaint the panel after the update
+                        map.updateMap(); // Attempt to update the map (move enemies)
+                        repaint(); // Repaint the panel after the update
                     } catch (GameOverException ex) {
                         // If the exception is thrown (game over), handle it here
                         handleGameOver();
                     }
                 }
-                 
+
             }
         });
         enemyMoveTimer.start();
     }
 
-    //Effects: genrate the next menu when game is over
+    // Effects: genrate the next menu when game is over
     private void gameOver() {
-        if (!gameOverTriggered) {  
+        if (!gameOverTriggered) {
             gameOverTriggered = true;
-              
-            
-            gameOver = true;  
-            enemyMoveTimer.stop();  
+
+            gameOver = true;
+            enemyMoveTimer.stop();
             placementTimer.stop();
             new Menu();
             System.out.print(gameOverTriggered);
         }
     }
 
-    
-     
-    //MODIFies: exitButton
-    //EffECTS: generate a new initial frame
+    // MODIFies: exitButton
+    // EffECTS: generate a new initial frame
     private void exitTheGame(JButton exitButton) {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new InitialFrame();
+                printLog();
+                System.exit(0);
             }
         });
     }
 
-    //MODIFies: saveButton
-    //EffECTS:  save the map
+    // MODIFies: saveButton
+    // EffECTS: save the map
     private void saveTheTowers(JButton saveButton) {
         saveButton.addActionListener(new ActionListener() {
             @Override
@@ -160,25 +155,22 @@ public class GamePanel extends JPanel {
         });
     }
 
-    //EFFECTS: add Towers and remove towers by clicking the mouse
- 
+    // EFFECTS: add Towers and remove towers by clicking the mouse
+
     private MouseAdapter mouseListener = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
             int mouseX = e.getX();
             int mouseY = e.getY();
 
- 
             int gridX = mouseX / gridWidth;
             int gridY = mouseY / gridHeight;
 
- 
             if (gridX < 0 || gridX >= cols || gridY < 0 || gridY >= rows) {
                 System.out.println("out of range");
                 return;
             }
 
- 
             if (!canPlaceTower) {
                 System.out.println("You can no longer place towers.");
                 return;
@@ -188,8 +180,8 @@ public class GamePanel extends JPanel {
             removeTower(e, gridX, gridY);
         }
 
-        //MODIEFIES: this
-        //EFFECTS:  remove towers  
+        // MODIEFIES: this
+        // EFFECTS: remove towers
         private void removeTower(MouseEvent e, int gridX, int gridY) {
             if (e.getButton() == MouseEvent.BUTTON3) {
                 for (Tower tower : map.getTowers()) {
@@ -203,8 +195,8 @@ public class GamePanel extends JPanel {
             }
         }
 
-        //MODIEFIES: this
-        //EFFECTS:  add towers  
+        // MODIEFIES: this
+        // EFFECTS: add towers
         private void addTower(MouseEvent e, int gridX, int gridY) {
             if (e.getButton() == MouseEvent.BUTTON1 && towerCount < maxTowers) {
                 Tower tower = new Tower(gridX, gridY);
@@ -216,13 +208,12 @@ public class GamePanel extends JPanel {
         }
     };
 
-
-    //MODIEFIES: this
-    //EFFECTS:  set up enemies
+    // MODIEFIES: this
+    // EFFECTS: set up enemies
     private void setUpEnemies(int level) {
         Random random = new Random();
         for (int i = 0; i <= level + 3; i++) {
-            int health = random.nextInt(30) + 50 * level;
+            int health = random.nextInt(30) + 40 * level;
             int enemyX = map.getWidth();
             int enemyY = random.nextInt(map.getHeight());
             addEnemy(health, enemyX, enemyY);
@@ -232,13 +223,13 @@ public class GamePanel extends JPanel {
     }
 
     // MODIEFIES: this
-    // EFFECTS:  add enemies
+    // EFFECTS: add enemies
     public void addEnemy(int health, int x, int y) {
         map.addEnemy(new Enemy(health, x, y));
     }
 
     // MODIEFIES: g
-    // EFFECTS:  paint the map
+    // EFFECTS: paint the map
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -253,7 +244,7 @@ public class GamePanel extends JPanel {
     // EFFECTS: replay when enemies are cleared
     private void replay() {
         if (enemyExist && enemyCleared()) {
-            if (!gameOver) {  
+            if (!gameOver) {
                 gameOver();
 
                 JOptionPane.showOptionDialog(
@@ -263,15 +254,14 @@ public class GamePanel extends JPanel {
                         JOptionPane.DEFAULT_OPTION,
                         JOptionPane.INFORMATION_MESSAGE,
                         null,
-                        new Object[] { "OK" }, 
-                        "OK"  
-                );
+                        new Object[] { "OK" },
+                        "OK"); 
+                frame.dispose();
             }
         }
-         
+
     }
 
-     
     // EFFECTS: replay when enemies reach the button
     private void handleGameOver() {
         if (!gameOverTriggered) {
@@ -279,24 +269,23 @@ public class GamePanel extends JPanel {
             gameOver = true;
             enemyMoveTimer.stop();
             placementTimer.stop();
-            new Menu();   
+            new Menu();
             JOptionPane.showOptionDialog(
-                        this,
-                        "Game Over: Enemy has reached the base!",
-                        "Game Over",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE,
-                        null,
-                        new Object[] { "OK" },
-                        "OK"
-            );
+                    this,
+                    "Game Over: Enemy has reached the base!",
+                    "Game Over",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    new Object[] { "OK" },
+                    "OK"); 
+            frame.dispose();
         }
     }
 
-         
     // Draw the towers
-	// modifies: g
-	// effects:  draws the towers onto g
+    // modifies: g
+    // effects: draws the towers onto g
     private void paintTowers(Graphics g) {
         for (Tower tower : map.getTowers()) {
             int x = tower.getX2() * gridWidth;
@@ -306,13 +295,13 @@ public class GamePanel extends JPanel {
     }
 
     // Draw the enemies
-	// modifies: g
-	// effects:  draws the enemies onto g
+    // modifies: g
+    // effects: draws the enemies onto g
     private void paintEnemies(Graphics g) {
         for (Enemy enemy : map.getEnemies()) {
             int x = enemy.getX1() * gridWidth;
             int y = enemy.getY1() * gridHeight;
-             
+
             g.drawImage(enemyImage, x, y, gridWidth, gridHeight, this);
 
             for (Tower tower : map.getTowers()) {
@@ -327,8 +316,8 @@ public class GamePanel extends JPanel {
     }
 
     // Draw the line
-	// modifies: g
-	// effects:  draws attack lines between tower and enemy onto g 
+    // modifies: g
+    // effects: draws attack lines between tower and enemy onto g
     private void paintAttackLines(Graphics g) {
         for (Tower tower : map.getTowers()) {
             for (Enemy enemy : map.getEnemies()) {
@@ -345,8 +334,8 @@ public class GamePanel extends JPanel {
     }
 
     // Draw the grids
-	// modifies: g
-	// effects:  draws grids onto g 
+    // modifies: g
+    // effects: draws grids onto g
     private void gridPanel(Graphics g) {
         g.setColor(Color.LIGHT_GRAY);
         for (int i = 0; i <= cols; i++) {
@@ -357,7 +346,7 @@ public class GamePanel extends JPanel {
         }
     }
 
-    // effects:  save the map
+    // effects: save the map
     private void saveMap() {
         System.out.println("Saving the game...");
         try {
@@ -370,8 +359,15 @@ public class GamePanel extends JPanel {
         }
     }
 
-    // effects:  to see if it is really game over
+    // effects: to see if it is really game over
     public boolean getGameOver() {
         return gameOver;
+    }
+
+    // EFFECTS: print all the event in the console
+    public void printLog() {
+        for (Event next : EventLog.getInstance()) {
+            System.out.println(next.toString() + "\n\n");
+        }
     }
 }

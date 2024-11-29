@@ -3,6 +3,7 @@ package ui;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
@@ -12,6 +13,7 @@ import model.GameMap;
 import model.GameOverException;
 import model.Tower;
 import model.Enemy;
+ 
 
 // Tower Defence Game App
 public class GameApp {
@@ -118,6 +120,7 @@ public class GameApp {
     // EFFECTS: processes user command
     private void processCommand(String command) {
         if (command.equals("r")) {
+            getTower();
             removeTower();
         } else if (command.equals("s")) {
             saveMap();
@@ -165,7 +168,6 @@ public class GameApp {
     public void removeTower() {
         int towerIndex;
         do {
-            getTower();
             System.out.println("Enter the number of the tower to remove (or 0 to skip):");
             towerIndex = scanner.nextInt();
             if (towerIndex > 0 && towerIndex <= map.getTowers().size()) {

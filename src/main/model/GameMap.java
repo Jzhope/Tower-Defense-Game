@@ -39,12 +39,15 @@ public class GameMap implements Writable {
         if (isWithinBounds(tower.getX2(), tower.getY2())) {
             this.towers.add(tower);
             System.out.println("Placed Tower at (" + (tower.getX2() + 1) + "," + (tower.getY2() + 1) + ")");
+            EventLog.getInstance().logEvent(new Event("Placed Tower at (" + (tower.getX2() + 1) 
+                    + "," + (tower.getY2() + 1) + ")"));
             return isinbound = 1;
         } else {
             System.out.println("Tower position (" + (tower.getX2() + 1) + ","
                     + (tower.getY2() + 1) + ") is out of bounds! Try another position!");
             return isinbound = 0;
         }
+
     }
 
     // MODIFIES: this
@@ -68,7 +71,7 @@ public class GameMap implements Writable {
     public void gameOverReachBase() {
         for (Enemy enemy : enemies) {
             if (enemy.reachedBase()) {
-                gameOver = true; // 如果游戏结束，将 gameOver 设置为 true
+                gameOver = true; 
                 throw new GameOverException("Enemy reached the base! Game over, you lose.");
             }
         }
@@ -129,6 +132,8 @@ public class GameMap implements Writable {
     // EFFECTS: remove the current tower
     public void removeTower(Tower tower) {
         towers.remove(tower);
+        EventLog.getInstance().logEvent(new Event("Removed tower at ("
+                + tower.getX2() + "," + tower.getY2() + ")."));
     }
 
     public int getWidth() {

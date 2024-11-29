@@ -41,7 +41,8 @@ public class Tower implements Writable {
                 attackedCount++;
             }
         }
-    }   
+    }  
+    
 
     public int getX2() {
         return x2;

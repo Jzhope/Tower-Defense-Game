@@ -13,11 +13,11 @@ public class InitialFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         
-        InitialPanel initialPanel = new InitialPanel();
+        InitialPanel initialPanel = new InitialPanel(this);
         add(initialPanel);
         
   
-        setSize(300, 200);
+        setSize(300, 240);
         setLocationRelativeTo(null);  
         setVisible(true);
     }

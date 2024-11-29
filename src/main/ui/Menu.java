@@ -11,13 +11,13 @@ public class Menu extends JFrame {
     int level;
 
     // Constructs main window
-	// effects: sets up window in which menu will be rendered
+    // effects: sets up window in which menu will be rendered
     public Menu() {
-         
+
         setTitle("Tower Defense Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 600);
-        
+
         JPanel menu = new JPanel();
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
         JButton levelChooseButton1 = new JButton("Choose the level 1 to replay");
@@ -37,9 +37,9 @@ public class Menu extends JFrame {
         quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         add(menu);
 
-        menuTable(levelChooseButton1, levelChooseButton2, levelChooseButton3, levelChooseButton4, quitButton);
-          
-        setLocationRelativeTo(null); 
+        menuTable(levelChooseButton1, levelChooseButton2, levelChooseButton3, levelChooseButton4, quitButton,this);
+
+        setLocationRelativeTo(null);
         setVisible(true);
         pack();
     }
@@ -54,7 +54,7 @@ public class Menu extends JFrame {
     }
 
     private void menuTable(JButton levelChooseButton1, JButton levelChooseButton2, JButton levelChooseButton3,
-            JButton levelChooseButton4, JButton quitButton) {
+            JButton levelChooseButton4, JButton quitButton, JFrame frame) {
         levelChoose1(levelChooseButton1);
 
         levelChoose2(levelChooseButton2);
@@ -63,13 +63,14 @@ public class Menu extends JFrame {
 
         levelChoose4(levelChooseButton4);
 
-        quitGame(quitButton);
+        quitGame(quitButton,frame);
     }
 
-    private void quitGame(JButton quitButton) {
+    private void quitGame(JButton quitButton, JFrame frame) {
         quitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                frame.dispose();
                 new InitialFrame();
             }
         });
@@ -112,8 +113,8 @@ public class Menu extends JFrame {
     }
 
     public void openNewWindow(int level) {
-        GameMap map = new GameMap(10,5);
-        new TowerDefense(map, level);
+        GameMap map = new GameMap(10, 5);
         this.dispose();
+        new TowerDefense(map, level);
     }
 }
