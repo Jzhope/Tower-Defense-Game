@@ -21,7 +21,7 @@ public class InitialPanel extends JPanel {
 
     // EFFECTS: construct a panel to show menu
     public InitialPanel(JFrame frame) {
-
+        
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -33,10 +33,7 @@ public class InitialPanel extends JPanel {
         JButton button3 = new JButton("Start the Game");
         JButton button4 = new JButton("Quit the Game");
 
-        button1.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button3.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button4.setAlignmentX(Component.CENTER_ALIGNMENT);
+        setAlignmentX(button1, button2, button3, button4);
 
         loadMap(button1);
         showdifficulty(button2);
@@ -51,6 +48,13 @@ public class InitialPanel extends JPanel {
         add(button3);
         add(Box.createVerticalStrut(20));
         add(button4);
+    }
+
+    private void setAlignmentX(JButton button1, JButton button2, JButton button3, JButton button4) {
+        button1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button3.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button4.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
     private void quitGame(JButton button4) {

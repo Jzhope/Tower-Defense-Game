@@ -88,14 +88,14 @@ public class GamePanel extends JPanel {
     // EFFECTS: generate Enemies
     private void startEnemyGeneration() {
          
-            Timer enemyGenerationTimer = new Timer(5000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    setUpEnemies(level);
-                    ((Timer) e.getSource()).stop(); 
-                }
-            });
-            enemyGenerationTimer.start(); 
+        Timer enemyGenerationTimer = new Timer(5000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setUpEnemies(level);
+                ((Timer) e.getSource()).stop(); 
+            }
+        });
+        enemyGenerationTimer.start(); 
 
     }
 
