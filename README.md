@@ -1,6 +1,6 @@
-# My Personal Project: Tetris Game Project
+# My Personal Project: Tower Defense Game Project
 
-## A Java-based classic arcade game
+## A Java-based classic aTower Defense Game
 
 # Introduction and background:
 - This application is used to write a Tower Defense game. Users will be able to add arbitary number of towers to the map to attack the enemies according to 4 different levels. With different levels, the enemies can have different numbers and health. But the towers will have only one damage. You can have arbitary number of round to play this game and you can delete any tower at the very beginning of every round.
