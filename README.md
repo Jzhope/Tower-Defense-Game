@@ -26,6 +26,7 @@
 
 # Phase 4: Task 2
 - You can see what event happened in the console when the program is running or ends. For example:
+        
         Thu Nov 28 13:07:23 PST 2024
         Placed Tower at (4,4)
 
