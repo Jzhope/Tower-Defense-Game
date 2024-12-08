@@ -1,5 +1,18 @@
 {
     "width": 10,
     "height": 5,
-    "towers": []
+    "towers": [
+        {
+            "The row of Tower": 1,
+            "The column of Tower": 3
+        },
+        {
+            "The row of Tower": 3,
+            "The column of Tower": 3
+        },
+        {
+            "The row of Tower": 2,
+            "The column of Tower": 5
+        }
+    ]
 }
